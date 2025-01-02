@@ -13,27 +13,28 @@ def battle(knights_config: dict) -> dict:
     }
 
     for name, knight in participants.items():
+        participant = knights_config.get(name)
 
-        if knights_config.get(name, {}).get("armour", []) is not None:
+        if participant.get("armour") is not None:
             knight_armour = [
                 Armour(armour["part"], armour["protection"])
-                for armour in knights_config.get(name, {}).get("armour", [])
+                for armour in participant.get("armour")
             ]
 
             for armour in knight_armour:
                 knight.apply_armour(armour)
 
         weapon = Weapon(
-            knights_config.get(name, {}).get("weapon", {})["name"],
-            knights_config.get(name, {}).get("weapon", {})["power"]
+            participant.get("weapon")["name"],
+            participant.get("weapon")["power"]
         )
 
         knight.apply_weapon(weapon)
 
-        if knights_config.get(name, {}).get("potion", {}) is not None:
+        if participant.get("potion") is not None:
             potion = Potion(
-                knights_config.get(name, {}).get("potion", {})["name"],
-                knights_config.get(name, {}).get("potion", {})["effect"]
+                participant.get("potion")["name"],
+                participant.get("potion")["effect"]
             )
 
             knight.apply_potion(potion)
