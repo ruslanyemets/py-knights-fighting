@@ -8,33 +8,39 @@ from app.arena.fight import Fight
 
 def battle(knights_config: dict) -> dict:
     participants = {
-        name: Knight(knight["name"], knight["power"], knight["hp"])
+        name: Knight(knight.get("name"), knight.get("power"), knight.get("hp"))
         for name, knight in knights_config.items()
     }
 
     for name, knight in participants.items():
         participant = knights_config.get(name)
 
-        if participant.get("armour") is not None:
+        participant_armour = participant.get("armour")
+
+        if participant_armour is not None:
             knight_armour = [
-                Armour(armour["part"], armour["protection"])
-                for armour in participant.get("armour")
+                Armour(armour.get("part"), armour.get("protection"))
+                for armour in participant_armour
             ]
 
             for armour in knight_armour:
                 knight.apply_armour(armour)
 
+        participant_weapon = participant.get("weapon")
+
         weapon = Weapon(
-            participant.get("weapon")["name"],
-            participant.get("weapon")["power"]
+            participant_weapon.get("name"),
+            participant_weapon.get("power")
         )
 
         knight.apply_weapon(weapon)
 
-        if participant.get("potion") is not None:
+        participant_potion = participant.get("potion")
+
+        if participant_potion is not None:
             potion = Potion(
-                participant.get("potion")["name"],
-                participant.get("potion")["effect"]
+                participant_potion.get("name"),
+                participant_potion.get("effect")
             )
 
             knight.apply_potion(potion)
